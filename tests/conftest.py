@@ -7,6 +7,6 @@ from selene import browser, have
 def open_registration_form():
     browser.config.window_width = 1280
     browser.config.window_height = 720
-    browser.open("https://demoqa.com/automation-practice-form")
+    browser.config.base_url = 'https://demoqa.com'
     yield browser
     browser.quit()
