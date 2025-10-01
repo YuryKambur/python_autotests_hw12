@@ -1,5 +1,6 @@
 import pytest
-from selene import browser, have
+from selene import browser
+
 
 
 
@@ -10,3 +11,4 @@ def open_registration_page():
     browser.config.base_url = 'https://demoqa.com'
     yield browser
     browser.quit()
+
