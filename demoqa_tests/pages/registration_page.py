@@ -9,36 +9,27 @@ class RegistrationPage:
 
     def __init__(self):
         self.panel = SubmittingFormPage()
-
         self._first_name      = browser.element('#firstName')
         self._last_name       = browser.element('#lastName')
         self._email           = browser.element('#userEmail')
         self._phone           = browser.element('#userNumber')
         self._address         = browser.element('#currentAddress')
-
         self._gender_male     = browser.element('label[for="gender-radio-1"]')
         self._gender_female   = browser.element('label[for="gender-radio-2"]')
         self._gender_other    = browser.element('label[for="gender-radio-3"]')
-
         self._dob_input       = browser.element('#dateOfBirthInput')
         self._dob_year_select = browser.element('.react-datepicker__year-select')
         self._dob_month_select= browser.element('.react-datepicker__month-select')
-
         self._subjects_box    = browser.element('#subjectsContainer')
         self._subjects_input  = browser.element('#subjectsInput')
-
         self._hobby_sports    = browser.element('label[for="hobbies-checkbox-1"]')
         self._hobby_reading   = browser.element('label[for="hobbies-checkbox-2"]')
         self._hobby_music     = browser.element('label[for="hobbies-checkbox-3"]')
-
         self._upload          = browser.element('#uploadPicture')
-
         self._state           = browser.element('#state')
         self._city            = browser.element('#city')
         self._options         = browser.all('[id^=react-select][id*=option]')
-
         self._submit          = browser.element('#submit')
-
         self._genders = {
             'Male':   self._gender_male,
             'Female': self._gender_female,
@@ -49,6 +40,7 @@ class RegistrationPage:
             'Reading': self._hobby_reading,
             'Music':   self._hobby_music,
         }
+
 
     def open(self):
         browser.open('/automation-practice-form')

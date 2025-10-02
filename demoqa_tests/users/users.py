@@ -21,6 +21,7 @@ class User:
     upload_file: str
     address: str
     state_city: str
+    permanent_address: str
 
 admin = User(
     full_name="John Smith",
@@ -33,6 +34,7 @@ admin = User(
     upload_file="kapi.jpg",
     address="Finland, Central Street, 25, 13",
     state_city="Haryana Karnal",
+    permanent_address = "Finland, Qqq Street, 455, 1"
 )
 
 guest = User(
@@ -46,4 +48,5 @@ guest = User(
     upload_file="kapi.jpg",
     address="USA, Central Street, 12, 12",
     state_city="NCR Delhi",
+    permanent_address = "USA, Wash Street, 455, 1"
 )
