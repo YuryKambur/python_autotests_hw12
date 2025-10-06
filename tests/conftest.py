@@ -1,7 +1,6 @@
 import pytest
-from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selene import Config, browser, Browser
+from selene import browser
 from utils import allure_attach
 
 

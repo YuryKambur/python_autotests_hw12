@@ -1,5 +1,4 @@
 import allure
-from allure_commons.types import AttachmentType
 
 from demoqa_tests.application import app
 from demoqa_tests.users import users
