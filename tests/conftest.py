@@ -26,10 +26,10 @@ def setup_browser(request):
     #
     # browser.config._driver = driver
     yield browser
-
-    allure_attach.add_screenshot(browser)
-    allure_attach.add_logs(browser)
-    allure_attach.add_html(browser)
-    # allure_attach.add_video(browser)
+    #
+    # allure_attach.add_screenshot(browser)
+    # allure_attach.add_logs(browser)
+    # allure_attach.add_html(browser)
+    # # allure_attach.add_video(browser)
 
     browser.quit()
