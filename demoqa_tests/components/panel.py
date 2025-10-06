@@ -7,7 +7,7 @@ class Panel:
         self.text_box = browser.element('#item-0')
 
     def open_form(self):
-        browser.open('/')
+        browser.open('https://demoqa.com/')
         self.elements_panel.click()
         self.text_box.click()
 
