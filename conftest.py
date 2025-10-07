@@ -6,18 +6,26 @@ from selenium.webdriver.chrome.options import Options
 from selene import browser
 from utils import allure_attach
 
+DEFAULT_BROWSER_VERSION = "128.0"
+
+def pytest_addoption(parser):
+    parser.addoption(
+        '--browser_version',
+        default='128.0'
+    )
 
 @pytest.fixture(scope="session", autouse=True)
 def load_env():
     load_dotenv()
 
 
-
 @pytest.fixture(scope='function')
 def setup_browser(request):
+    browser_version = request.config.getoption('--browser_version')
+    browser_version = browser_version if browser_version != "" else DEFAULT_BROWSER_VERSION
     options = Options()
     options.set_capability("browserName", "chrome")
-    options.set_capability("browserVersion", "128.0")
+    options.set_capability("browserVersion", browser_version)
     options.set_capability("selenoid:options", {
         "enableVNC": True,
         "enableVideo": True
