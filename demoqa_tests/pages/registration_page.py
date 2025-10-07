@@ -1,4 +1,6 @@
 from typing import Literal
+
+import allure
 from selene import browser, have, command
 from demoqa_tests import resource
 from demoqa_tests.pages.submitting_form_page import SubmittingFormPage
@@ -43,102 +45,113 @@ class RegistrationPage:
 
 
     def open(self):
-        browser.open('https://demoqa.com/automation-practice-form')
-        browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).wait_until(
-            have.size_greater_than_or_equal(3))
-        browser.all('[id^=google_ads][id$=container__]').perform(command.js.remove)
+        with allure.step("Открыть страницу формы автоматизации"):
+            browser.open('https://demoqa.com/automation-practice-form')
+            browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).wait_until(
+                have.size_greater_than_or_equal(3))
+            browser.all('[id^=google_ads][id$=container__]').perform(command.js.remove)
         return self
 
     def fill_first_name(self, value):
-        self._first_name.type(value)
+        with allure.step(f"Заполнить имя: {value}"):
+            self._first_name.type(value)
         return self
 
     def fill_last_name(self, value):
-        self._last_name.type(value)
+        with allure.step(f"Заполнить фамилию: {value}"):
+            self._last_name.type(value)
         return self
 
     def fill_email(self, value):
-        self._email.type(value)
+        with allure.step(f"Заполнить email: {value}"):
+            self._email.type(value)
         return self
 
     def fill_phone(self, value):
-        self._phone.type(value)
+        with allure.step(f"Заполнить телефон: {value}"):
+            self._phone.type(value)
         return self
 
     def fill_address(self, value):
-        self._address.type(value)
+        with allure.step(f"Заполнить адрес: {value}"):
+            self._address.type(value)
         return self
 
     def select_gender(self, gender: Literal['Male', 'Female', 'Other']):
-        self._genders[gender].click()
+        with allure.step(f"Выбрать пол: {gender}"):
+            self._genders[gender].click()
         return self
 
     def fill_date_of_birth(self, year, month, day):
-        self._dob_input.click()
-        self._dob_year_select.click()
-        browser.element(f'option[value="{int(year)}"]').click()
-        self._dob_month_select.click()
-        browser.element(f'option[value="{int(month)-1}"]').click()
-        browser.element(
-            f'.react-datepicker__day--0{int(day):02d}:not(.react-datepicker__day--outside-month)'
-        ).click()
+        with allure.step(f"Заполнить дату рождения: {day}.{month}.{year}"):
+            self._dob_input.click()
+            self._dob_year_select.click()
+            browser.element(f'option[value="{int(year)}"]').click()
+            self._dob_month_select.click()
+            browser.element(f'option[value="{int(month) - 1}"]').click()
+            browser.element(
+                f'.react-datepicker__day--0{int(day):02d}:not(.react-datepicker__day--outside-month)'
+            ).click()
         return self
 
     def fill_subjects(self, value):
-        self._subjects_box.click()
-        self._subjects_input.type(value).press_enter()
+        with allure.step(f"Заполнить предмет: {value}"):
+            self._subjects_box.click()
+            self._subjects_input.type(value).press_enter()
         return self
 
     def fill_hobbies(self, value: Literal['Sports', 'Reading', 'Music']):
-        self._hobbies[value].click()
+        with allure.step(f"Выбрать хобби: {value}"):
+            self._hobbies[value].click()
         return self
 
     def upload_file(self, value):
-        self._upload.set_value(resource.path(value))
+        with allure.step(f"Загрузить файл: {value}"):
+            self._upload.set_value(resource.path(value))
         return self
 
     def fill_state(self, value):
-        self._state.perform(command.js.scroll_into_view)
-        self._state.click()
-        self._options.element_by(have.exact_text(value)).click()
+        with allure.step(f"Выбрать штат: {value}"):
+            self._state.perform(command.js.scroll_into_view)
+            self._state.click()
+            self._options.element_by(have.exact_text(value)).click()
         return self
 
     def fill_city(self, value):
-        self._city.click()
-        self._options.element_by(have.exact_text(value)).click()
+        with allure.step(f"Выбрать город: {value}"):
+            self._city.click()
+            self._options.element_by(have.exact_text(value)).click()
         return self
 
     def fill_from(self, user: User):
+        with allure.step("Заполнить форму данными пользователя"):
+            first, last = user.full_name.split(' ', 1)
+            subjects = [s.strip() for s in user.subject.split(',') if s.strip()]
+            hobbies = [h.value if isinstance(h, Hobby) else str(h) for h in user.hobbies]
+            state_city = user.state_city.split()
+            state, city = state_city[0], state_city[-1]
 
-        first, last = user.full_name.split(' ', 1)
+            (self
+             .fill_first_name(first)
+             .fill_last_name(last)
+             .fill_email(user.email)
+             .fill_phone(user.number)
+             .fill_address(user.address)
+             .select_gender(user.gender)
+             .fill_date_of_birth(user.date_of_birth.year,
+                                 user.date_of_birth.month,
+                                 user.date_of_birth.day)
+             )
+            for s in subjects:
+                self.fill_subjects(s)
+            for h in hobbies:
+                self.fill_hobbies(h)
 
-        subjects = [s.strip() for s in user.subject.split(',') if s.strip()]
-        hobbies = [h.value if isinstance(h, Hobby) else str(h) for h in user.hobbies]
+            (self
+             .upload_file(user.upload_file)
+             .fill_state(state)
+             .fill_city(city)
+             )
 
-        state_city = user.state_city.split()
-        state, city = state_city[0], state_city[-1]
-
-        (self
-         .fill_first_name(first)
-         .fill_last_name(last)
-         .fill_email(user.email)
-         .fill_phone(user.number)
-         .fill_address(user.address)
-         .select_gender(user.gender)
-         .fill_date_of_birth(user.date_of_birth.year,
-                            user.date_of_birth.month,
-                            user.date_of_birth.day)
-         )
-        for s in subjects:
-            self.fill_subjects(s)
-        for h in hobbies:
-            self.fill_hobbies(h)
-
-        (self
-         .upload_file(user.upload_file)
-         .fill_state(state)
-         .fill_city(city)
-         )
-
-        self._submit.click()
+            self._submit.click()
         return self
