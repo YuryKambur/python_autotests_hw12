@@ -208,4 +208,5 @@ __marimo__/
 
 /.idea
 /allure-results
+/.env
 
